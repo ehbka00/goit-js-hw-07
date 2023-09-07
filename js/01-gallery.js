@@ -4,7 +4,7 @@ import { galleryItems } from "./gallery-items.js";
 const gallery = document.querySelector(".gallery");
 gallery.addEventListener("click", (event) => {
   event.preventDefault();
-  showImage(event.target);
+  if (event.target.nodeName === "IMG")  showImage(event.target);
 });
 
 createGalleryItems();
@@ -26,6 +26,14 @@ function createGalleryItems() {
 
 function showImage(imgItem) {
   const newElemImg = "<img src=" + imgItem.getAttribute("data-source") + ">";
+  basicLightbox.create(`${newElemImg}`, {
+    onShow: (img) => closeImageByKeyEsc(img)                     
+  }).show();
+}
 
-  basicLightbox.create(`${newElemImg}`).show();
+function closeImageByKeyEsc(img) {
+  document.addEventListener("keydown", (evt) => {
+    if (evt.key === 'Escape') img.close();
+  }, {once: true})
+
 }
