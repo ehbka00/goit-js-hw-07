@@ -20,7 +20,7 @@ function createGalleryItems() {
   gallery.insertAdjacentHTML("beforeend", itemsArray);
 }
 
-let Lightbox = new SimpleLightbox(".gallery__link", {
+let lightox = new SimpleLightbox(".gallery__link", {
   captionsData: "alt",
   captionDelay: 250,
 });

@@ -7,6 +7,8 @@ gallery.addEventListener("click", (event) => {
   if (event.target.nodeName === "IMG")  showImage(event.target);
 });
 
+let lightbox;
+
 createGalleryItems();
 
 function createGalleryItems() {
@@ -26,14 +28,21 @@ function createGalleryItems() {
 
 function showImage(imgItem) {
   const newElemImg = "<img src=" + imgItem.getAttribute("data-source") + ">";
-  basicLightbox.create(`${newElemImg}`, {
-    onShow: (img) => closeImageByKeyEsc(img)                     
-  }).show();
+  lightbox = basicLightbox.create(`${newElemImg}`, {
+    onShow: () => {
+      document.addEventListener("keydown", closeImageByKeyEsc);
+    },
+    onClose: () => {
+      document.removeEventListener("keydown", closeImageByKeyEsc);
+    },
+  });
+
+  lightbox.show();
 }
 
-function closeImageByKeyEsc(img) {
-  document.addEventListener("keydown", (evt) => {
-    if (evt.key === 'Escape') img.close();
-  }, {once: true})
-
+function closeImageByKeyEsc(e) {
+  e.stopPropagation();
+  if (e.key === 'Escape') {
+    lightbox.close();
+  }
 }
